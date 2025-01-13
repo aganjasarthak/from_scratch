@@ -86,3 +86,44 @@ for pair in total_pairs :
  
 new=pd.DataFrame(allpredictions).T
 print(new)
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Create a sample dataset
+np.random.seed(42)
+X = np.random.rand(100, 5)  # 100 samples, 5 features
+y = X @ np.array([2, -1, 3, 0.5, 4]) + np.random.randn(100) * 0.5  # Linear relation with noise
+
+# Split into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Random Forest Regressor
+rf_regressor = RandomForestRegressor(n_estimators=10000, random_state=42)
+rf_regressor.fit(X_train, y_train)
+y_pred_rf = rf_regressor.predict(X_test)
+rf_mse = mean_squared_error(y_test, y_pred_rf)
+
+# Train a Decision Tree Regressor
+dt_regressor = DecisionTreeRegressor(random_state=42)
+dt_regressor.fit(X_train, y_train)
+y_pred_dt = dt_regressor.predict(X_test)
+dt_mse = mean_squared_error(y_test, y_pred_dt)
+
+# Train a Linear Regression model
+lr_regressor = LinearRegression()
+lr_regressor.fit(X_train, y_train)
+y_pred_lr = lr_regressor.predict(X_test)
+lr_mse = mean_squared_error(y_test, y_pred_lr)
+
+# Output results
+print("Mean Squared Error of models:")
+print(f"Random Forest Regressor: {rf_mse:.4f}")
+print(f"Decision Tree Regressor: {dt_mse:.4f}")
+print(f"Linear Regression: {lr_mse:.4f}")
+
